@@ -57,6 +57,18 @@ def decode_bit(signal, fs, f0=1000, f1=2000):
         return 1
 
 
+def analyze_signal(signal, fs):
+    N = len(signal)
+
+    X = direct_dft(signal)
+
+    frequencies = np.fft.rfftfreq(N, d=1/fs)
+    magnitude = np.abs(X[:N//2 + 1])
+    phase = np.angle(X[:N//2 + 1], deg=True)
+
+    return frequencies, magnitude, phase
+
+
 # Test our DFT against NumPy FFT
 if __name__ == "__main__":
     test_signals = {
