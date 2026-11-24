@@ -59,17 +59,26 @@ def decode_bit(signal, fs, f0=1000, f1=2000):
 
 # Test our DFT against NumPy FFT
 if __name__ == "__main__":
-    signal = np.array([1, 2, 3, 4], dtype=float)
+    test_signals = {
+        "Simple signal": np.array([1, 2, 3, 4]),
+        "Zero signal": np.zeros(8),
+        "Constant signal": np.ones(8),
+        "Impulse signal": np.array([1, 0, 0, 0]),
+        "Odd length signal": np.array([1, 2, 3, 4, 5]),
+        "Sine wave": np.sin(
+            2 * np.pi * 1000 * np.arange(80) / 8000
+        )
+    }
 
-    my_dft = direct_dft(signal)
-    numpy_fft = np.fft.fft(signal)
+    for name, signal in test_signals.items():
+        my_dft = direct_dft(signal)
+        numpy_fft = np.fft.fft(signal)
 
-    print("Direct DFT:")
-    print(my_dft)
+        match = np.allclose(my_dft, numpy_fft)
+        max_error = np.max(np.abs(my_dft - numpy_fft))
 
-    print("\nNumPy FFT:")
-    print(numpy_fft)
-
-    print("\nResults match:",
-          np.allclose(my_dft, numpy_fft))
+        print(name)
+        print("Results match:", match)
+        print(f"Maximum error: {max_error:.2e}")
+        print()
 
