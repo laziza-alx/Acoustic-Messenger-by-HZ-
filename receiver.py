@@ -114,7 +114,17 @@ def refine_start(x, fs, t_coarse, n_bits, bit_duration, f0, f1, early=0.007, ste
 
 
 def decide(mags):
-    return "".join("1" if m1 > m0 else "0" for m0, m1 in mags)
+    strongest = mags.max(axis=1)
+    typical = np.median(strongest)
+    bits = ""
+    for m0, m1 in mags:
+        if max(m0, m1) < 0.25 * typical:
+            bits += "?"
+        elif m1 > m0:
+            bits += "1"
+        else:
+            bits += "0"
+    return bits
 
 
 def bit_errors(decoded, truth):
@@ -303,6 +313,7 @@ def main():
     print(f"Sent    : {truth}")
     print("=" * 64)
     print(f"  BER = {ber:.4f}   ({errors} errors out of {n_bits} bits)")
+    print(f"  of which {bits.count('?')} bits had neither tone (shown as ?)")
     print("=" * 64)
 
     stem = os.path.splitext(os.path.basename(wav_path))[0]
