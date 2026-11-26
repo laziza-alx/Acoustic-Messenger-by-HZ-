@@ -1,0 +1,12 @@
+{
+  "bit_duration": 0.1,
+  "f0": 1000.0,
+  "f1": 1200.0,
+  "guard": 0.1,
+  "offset_ms": 0.0,
+  "band_bins": 2,
+  "min_power": 1e-06,
+  "min_snr": 5.0,
+  "min_band_ratio": 0.25,
+  "min_contrast": 0.25
+}
